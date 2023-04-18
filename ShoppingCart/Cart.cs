@@ -24,12 +24,14 @@ namespace ShoppingCart
             {
                 Console.WriteLine("Handlekurven er tom.");
                 return;
-            }           
+            }      
+            var totalPrice = 0;
             foreach (var line in OrderLines)
             {
                 line.ShowOrderLine();
+                totalPrice += line.LinePrice;
             }
-            Console.WriteLine($"Totalpris: {GetTotalPrice()}");
+            Console.WriteLine($"Totalpris: {totalPrice}");
         }
 
         public void AddToCart(Product product, int count)
@@ -41,19 +43,8 @@ namespace ShoppingCart
             } else 
             {
                 orderLine.UpdateLineCount(count);
-                orderLine.UpdateLinePrice();
             }
             Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
-        }
-
-        private int GetTotalPrice()
-        {
-            _totalPrice = 0;
-            foreach (var line in OrderLines)
-            {
-                _totalPrice += line.LinePrice;
-            }
-            return _totalPrice;
         }
     }
 }
