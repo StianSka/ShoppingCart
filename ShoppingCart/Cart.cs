@@ -26,24 +26,25 @@ namespace ShoppingCart
             var totalPrice = 0;
             foreach (var line in OrderLines)
             {
+                line.ShowOrderLine();
                 totalPrice += line.Product.Price * line.Count;
-                Console.WriteLine($"  {line.Count} stk. {line.Product.Name} kr {line.Product.Price} = {line.Product.Price * line.Count}");
             }
             Console.WriteLine($"Totalpris: {totalPrice}");
         }
 
         public void AddToCart(Product product, int count)
         {
-            foreach (var line in OrderLines)
+            var orderLine = OrderLines.FirstOrDefault(line => line.Product == product);
+            if (orderLine == null)
             {
-                if (product == line.Product) { 
-                    line.Count += count;
-                    Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
-                    return;
-                }
+                OrderLines.Add(new OrderLine(product, count));
+                Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
             }
-            OrderLines.Add( new OrderLine(product,count)); 
-            Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
+            else
+            {
+                orderLine.Count += count;
+                Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
+            }
         }
     }
 }
