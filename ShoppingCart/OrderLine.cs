@@ -10,7 +10,7 @@ namespace ShoppingCart
     {
         public Product Product { get; }
         public int Count { get; set; }
-        public int LinePrice { get; }
+        public int LinePrice { get; set; }
 
         public OrderLine(Product product, int count)
         {
@@ -21,7 +21,10 @@ namespace ShoppingCart
 
         public void ShowOrderLine()
         {
-            Console.WriteLine($"  {Count} stk. {Product.Name} kr {Product.Price} = {Product.Price * Count}");
+            Console.WriteLine($"  {Count} stk. {Product.Name} kr {Product.Price} = {LinePrice}");
         }
+
+        public void UpdateLinePrice() { LinePrice = Product.Price * Count; }
+        public void UpdateLineCount(int count) { Count += count; }
     }
 }

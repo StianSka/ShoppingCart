@@ -10,10 +10,12 @@ namespace ShoppingCart
     internal class Cart
     {
         public List<OrderLine> OrderLines { get; }
+        private int _totalPrice;
 
         public Cart() 
         {
             OrderLines = new List<OrderLine>();
+            _totalPrice = 0;
         }
 
         public void ShowCartContent()
@@ -22,14 +24,12 @@ namespace ShoppingCart
             {
                 Console.WriteLine("Handlekurven er tom.");
                 return;
-            }
-            var totalPrice = 0;
+            }           
             foreach (var line in OrderLines)
             {
                 line.ShowOrderLine();
-                totalPrice += line.Product.Price * line.Count;
             }
-            Console.WriteLine($"Totalpris: {totalPrice}");
+            Console.WriteLine($"Totalpris: {GetTotalPrice()}");
         }
 
         public void AddToCart(Product product, int count)
@@ -38,13 +38,22 @@ namespace ShoppingCart
             if (orderLine == null)
             {
                 OrderLines.Add(new OrderLine(product, count));
-                Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
-            }
-            else
+            } else 
             {
-                orderLine.Count += count;
-                Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
+                orderLine.UpdateLineCount(count);
+                orderLine.UpdateLinePrice();
             }
+            Console.WriteLine($"Du kjøpte {count} stk. {product.Name}");
+        }
+
+        private int GetTotalPrice()
+        {
+            _totalPrice = 0;
+            foreach (var line in OrderLines)
+            {
+                _totalPrice += line.LinePrice;
+            }
+            return _totalPrice;
         }
     }
 }
